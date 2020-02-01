@@ -43,7 +43,10 @@ typedef unsigned char uint8_t;
 #include <inttypes.h>
 #include <iostream>
 #include <ros/ros.h>
-#include <cob_forcetorque/ForceTorqueCtrl.h>
+
+//#include <cob_forcetorque/ForceTorqueCtrl.h>
+// #include <ati_force_torque/ati_force_torque_hw_can.h>
+#include <ati_force_torque/ati_force_torque_hw_nidaqmx.h>
 
 #include <std_srvs/Trigger.h>
 
@@ -78,7 +81,11 @@ private:
   ros::ServiceServer srvSever_Reset_;
 
   bool m_isInitialized;
-  ForceTorqueCtrl *p_Ftc;
+  
+  //ForceTorqueCtrl *p_Ftc;
+  // ATIForceTorqueSensorHWCan *p_Ftc;
+  ATIForceTorqueSensorHWNIDAQmx *p_Ftc;
+  
 };
 
 ForceTorqueConfig::ForceTorqueConfig()
@@ -100,12 +107,15 @@ ForceTorqueConfig::ForceTorqueConfig()
 
   if (canType != -1)
   {
-    p_Ftc = new ForceTorqueCtrl(canType, canPath, canBaudrate, ftsBaseID);
+    //p_Ftc = new ForceTorqueCtrl(canType, canPath, canBaudrate, ftsBaseID);
+    // p_Ftc = new ATIForceTorqueSensorHWCan(canType, canPath, canBaudrate, ftsBaseID);
   }
   else
   {
-    p_Ftc = new ForceTorqueCtrl();
+    //p_Ftc = new ForceTorqueCtrl();
+    // p_Ftc = new ATIForceTorqueSensorHWCan();
   }
+  p_Ftc = new ATIForceTorqueSensorHWNIDAQmx();
 
   initFts();
 }
@@ -115,7 +125,7 @@ bool ForceTorqueConfig::initFts()
   if (!m_isInitialized)
   {
     // read return init status and check it!
-    if (p_Ftc->Init())
+    if (p_Ftc->init())
     {
       ROS_INFO("FTC initialized");
       m_isInitialized = true;

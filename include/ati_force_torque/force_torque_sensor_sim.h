@@ -38,6 +38,10 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  ****************************************************************/
+
+#ifndef ATIFORCETORQUESENSORSIM_INCLUDEDEF_H
+#define ATIFORCETORQUESENSORSIM_INCLUDEDEF_H
+
 #include <stdint.h>
 typedef unsigned char uint8_t;
 #include <inttypes.h>
@@ -48,7 +52,7 @@ typedef unsigned char uint8_t;
 #include <geometry_msgs/WrenchStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
-#include <cob_forcetorque/ForceTorqueCtrl.h>
+// #include <cob_forcetorque/ForceTorqueCtrl.h>
 
 #include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/transform_listener.h>
@@ -96,3 +100,4 @@ private:
 
 };
 
+#endif

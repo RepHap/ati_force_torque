@@ -56,8 +56,9 @@
 #include <force_torque_sensor/force_torque_sensor_sim.h>
 #include <force_torque_sensor/NodeConfigurationParameters.h>
 
-#include <ati_force_torque/ati_force_torque_hw_can.h>
-#include <ati_force_torque/ati_force_torque_hw_rs485.h>
+// #include <ati_force_torque/ati_force_torque_hw_can.h>
+// #include <ati_force_torque/ati_force_torque_hw_rs485.h>
+#include <ati_force_torque/ati_force_torque_hw_nidaqmx.h>
 
 class ATIForceTorqueSensorNode
 {
@@ -66,24 +67,26 @@ public:
 {
     node_params_.fromParamServer();
     bool sim = node_params_.sim;
-    hardware_interface::ForceTorqueSensorHW *sensor;
-    if(sim) {
-      sensor = new force_torque_sensor::ForceTorqueSensorSim();
-    }
-    else if (node_params_.sensor_hw == "ati_force_torque/ATIForceTorqueSensorHWCan"){
-        sensor = new ATIForceTorqueSensorHWCan();
-    }
-    else if (node_params_.sensor_hw == "ati_force_torque/ATIForceTorqueSensorHWRS485"){
-        sensor = new ATIForceTorqueSensorHWRS485();
-    }
-    else {
-        ROS_ERROR("Unknown sensor hardware plugin!");
-        return;
-    }
-    new force_torque_sensor::ForceTorqueSensorHandle(nh, sensor, node_params_.sensor_frame,node_params_.transform_frame);
+    // if(sim) {
+    //   sensor = new force_torque_sensor::ForceTorqueSensorSim();
+    // }
+    // else if (node_params_.sensor_hw == "ati_force_torque/ATIForceTorqueSensorHWCan"){
+    //     sensor = new ATIForceTorqueSensorHWCan();
+    // }
+    // else if (node_params_.sensor_hw == "ati_force_torque/ATIForceTorqueSensorHWRS485"){
+    //     sensor = new ATIForceTorqueSensorHWRS485();
+    // }
+    // else {
+    //     ROS_ERROR("Unknown sensor hardware plugin!");
+    //     return;
+    // }
+    sensor = new ATIForceTorqueSensorHWNIDAQmx();
+    handle = new force_torque_sensor::ForceTorqueSensorHandle(nh, sensor, node_params_.sensor_frame,node_params_.transform_frame);
 }
 private:
     force_torque_sensor::NodeConfigurationParameters node_params_;
+    hardware_interface::ForceTorqueSensorHW *sensor;
+    force_torque_sensor::ForceTorqueSensorHandle *handle;
 };
 
 int main(int argc, char **argv)
